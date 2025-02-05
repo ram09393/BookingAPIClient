@@ -28,10 +28,7 @@ class APIClient:
             raise ValueError(f"Unsupported environment value: {environment_str}")
 
         self.base_url = get_base_url(environment)
-        self.session = requests.session()
-        self.session.headers = {
-            'Content-Type': 'application/json'
-        }
+        self.session = requests.Session()
 
     def get(self, endpoint, params=None, status_code=200):
         url = self.base_url + endpoint
