@@ -73,7 +73,7 @@ def auth(self):
 
 def get_booking_by_id(self, booking_id):
     with allure.step('Get booking by ID'):
-        url = f"{self.base_url}{Endpoints.GET_BOOKING_ID_ENDPOINT.value}/{booking_id}"
+        url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT.value}/{booking_id}"
         response = self.session.get(url)
         response.raise_for_status()
     with allure.step('Checking status code'):
