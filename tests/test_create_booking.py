@@ -57,3 +57,4 @@ def test_create_booking_with_custom_data(api_client, booking_response, bookingre
     # Проверка на отсутствие лишних полей
     assert all(field in booking_response.booking.dict() for field in
                booking_data.keys()), "Response should not contain extra fields."
+
