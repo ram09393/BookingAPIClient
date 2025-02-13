@@ -2,9 +2,10 @@ import allure
 from pydantic import ValidationError
 from core.models.booking import BookingResponse
 
+
 @allure.feature('Test creating booking')
 @allure.story('Positive: creating booking with custom data')
-def test_create_booking_with_custom_data(api_client):
+def test_create_booking_with_custom_data(api_client, booking_response, bookingresponse):
     booking_data = {
         "firstname": "Ivan",
         "lastname": "Ivanovich",
@@ -14,7 +15,7 @@ def test_create_booking_with_custom_data(api_client):
             "checkin": "2025-02-01",
             "checkout": "2025-02-10"
         },
-    "additionalneeds": "Dinner"
+        "additionalneeds": "Dinner"
     }
 
     response = api_client.create_booking(booking_data)
@@ -31,7 +32,7 @@ def test_create_booking_with_custom_data(api_client):
     assert response['booking']['bookingdates'] == booking_data['bookingdates']
     assert response['booking']['additionalneeds'] == booking_data['additionalneeds']
 
-#_______________________________________________________________________________________________________________________
+    #_______________________________________________________________________________________________________________________
     # Проверка диапазона дат
 
     assert 'bookingid' in response, "Response should contain 'bookingid'."
@@ -54,4 +55,5 @@ def test_create_booking_with_custom_data(api_client):
     assert booking_response.booking.bookingdates.dict() == booking_data['bookingdates']
 
     # Проверка на отсутствие лишних полей
-    assert all(field in booking_response.booking.dict() for field in booking_data.keys()), "Response should not contain extra fields."
+    assert all(field in booking_response.booking.dict() for field in
+               booking_data.keys()), "Response should not contain extra fields."

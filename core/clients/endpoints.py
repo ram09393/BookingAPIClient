@@ -8,3 +8,4 @@ class Endpoints(Enum):
     BOOKING_ENDPOINT = "/booking"
 
 
+

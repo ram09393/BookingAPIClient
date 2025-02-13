@@ -2,21 +2,21 @@ import allure
 import pytest
 import requests
 
-#Каждая функция проверяет разные сценарии:
-# успешное создание брони
-# ошибка из-за отсутствия полей
-# ошибка с сервером (некорректные данные)
+# Каждая функция проверяет разные сценарии:
+# - успешное создание брони
+# - ошибка из-за отсутствия полей
+# - ошибка с сервером (некорректные данные)
 
 
 @allure.feature('Test Create Booking')
 @allure.story('Test successful booking creation')
-def test_create_booking_success(apiclient, mocker):
+def test_create_booking_success(apiclient, mocker, api_client, mock_response=None):
     mock_response = mocker.Mock()
-    mockresponse.statuscode = 200
-    mockresponse.json.return_value = {"booking_id": 2}
+    mock_response.statuscode = 200
+    mock_response.json.return_value = {"booking_id": 2}
     mocker.patch.object(apiclient.session, 'post', return_value=mock_response)
 
-    response = apiclient.createbooking({
+    response = api_client.createbooking({
         "firstname": "John",
         "lastname": "Doe",
         "totalprice": 133,
@@ -33,9 +33,9 @@ def test_create_booking_success(apiclient, mocker):
 
 @allure.feature('Test Create Booking')
 @allure.story('Test booking creation with missing fields')
-def test_create_booking_missing_fields(api_client, mocker):
+def test_create_booking_missing_fields(api_client, mocker, mock_response=None, apiclient=None):
     mock_response = mocker.Mock()
-    mockresponse.statuscode = 404
+    mock_response.statuscode = 404
     mocker.patch.object(apiclient.session, 'post', return_value=mock_response)
 
     with pytest.raises(AssertionError, match="Expected status 200 but got 404"):
@@ -48,13 +48,13 @@ def test_create_booking_missing_fields(api_client, mocker):
 
 @allure.feature('Test Create Booking')
 @allure.story('Test server error during booking creation')
-def test_create_booking_server_error(api_client, mocker):
+def test_create_booking_server_error(api_client, mocker, mock_response=None, apiclient=None):
     mock_response = mocker.Mock()
-    mockresponse.statuscode = 500
-    mocker.patch.object(apiclient.session, 'post', return_value=mock_response)
+    mock_response.statuscode = 500
+    mocker.patch.object(api_client.session, 'post', return_value=mock_response)
 
     with pytest.raises(AssertionError, match="Expected status 200 but got 500"):
-        apiclient.createbooking({
+        api_client.createbooking({
             "firstname": "John",
             "lastname": "Doe",
             "totalprice": 132,
@@ -68,11 +68,11 @@ def test_create_booking_server_error(api_client, mocker):
 
 @allure.feature('Test Create Booking')
 @allure.story('Test timeout during booking creation')
-def test_create_booking_timeout(apiclient, mocker):
-    mocker.patch.object(apiclient.session, 'post', side_effect=requests.Timeout)
+def test_create_booking_timeout(api_client, mocker):
+    mocker.patch.object(api_client.session, 'post', side_effect=requests.Timeout)
 
     with pytest.raises(requests.Timeout):
-        apiclient.createbooking({
+        api_client.createbooking({
             "firstname": "John",
             "lastname": "Doe",
             "totalprice": 111,
