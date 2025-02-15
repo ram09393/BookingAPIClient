@@ -24,7 +24,8 @@ class APIClient:
 
     def __init__(self):
         self.headers = None
-        environment_str = os.getenv('ENVIRONMENT')
+        environment_str = os.getenv('ENVIRONMENT', 'default_value')
+        print(f"ENVIRONMENT: {environment_str}")
         try:
             environment = Environment[environment_str]
         except KeyError:
