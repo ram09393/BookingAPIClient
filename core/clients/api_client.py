@@ -23,6 +23,7 @@ def get_base_url(environment: Environment) -> str:
 class APIClient:
 
     def __init__(self):
+        global environment
         self.headers = None
         environment_str = os.getenv('ENVIRONMENT', 'default_value')
         print(f"ENVIRONMENT: {environment_str}")
